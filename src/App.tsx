@@ -117,7 +117,7 @@ function App() {
                 </div>
                 <div className="w-full py-4 pr-4">
                   <div className="font-bold">{error}</div>
-                  <div>Make sure your node is properly configured</div>
+                  <div className="text-sm">Make sure your node is properly configured and check your node logs.</div>
                 </div>
               </div>
             )}
