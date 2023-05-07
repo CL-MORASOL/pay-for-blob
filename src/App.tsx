@@ -10,6 +10,11 @@ function App() {
   const [sending, setSending] = useState(false)
   const [height, setHeight] = useState(0)
   const [txHash, setTxHash] = useState("")
+  const [network, setNetwork] = useState<"mocha"|"blockspacerace"|"arabica">("mocha")
+
+  const PFBName = () => {
+    return network === "blockspacerace" ? "PFB" : "PFD"
+  }
 
   const isValid = () => {
     return domain.length > 0 && port && namespaceId.length > 0 && data.length > 0
@@ -26,9 +31,11 @@ function App() {
 
     setSending(true)
 
+    const uri = network === "blockspacerace" ? "submit_pfb" : "submit_pfd"
+
     let res
     try {
-      res = await axios.post(`http://${domain}:${port}/submit_pfb`, {
+      res = await axios.post(`http://${domain}:${port}/${uri}`, {
         namespace_id: namespaceId,
         data: data,
         gas_limit: 80000,
@@ -51,14 +58,13 @@ function App() {
   return (
     <div className="flex flex-wrap">
       <div className="w-full lg:w-1/3 bg-white p-6">
-        <h1 className="text-2xl font-bold">Submit your PFB transaction</h1>
-        <p className="mt-2 text-gray-600">Use this tool to submit your <strong>P</strong>ay<strong>F</strong>or<strong>B</strong>lob transaction easily.</p>
+        <h1 className="text-2xl font-bold">Submit your {PFBName()} transaction</h1>
         <div className="bg-yellow-50 px-4 py-3 shadow-sm rounded text-yellow-800 border-l-4 border-yellow-600 mt-6">
-          <p>When running a Celestia node, you will need to use the following flags when starting your node to submit a PFB:</p>
+          <p>When running a Celestia node, you will need to use the following flags when starting your node to submit a {PFBName()}:</p>
           <ul className="mt-4 ml-6 list-disc">
             <li className="mb-3">the <code className="bg-yellow-100 px-1 border rounded text-sm whitespace-nowrap">--core.ip string</code> flag, to allow you to submit transactions to your node</li>
             <li>the <code className="bg-yellow-100 px-1 border rounded text-sm whitespace-nowrap">--gateway</code>, <code className="bg-yellow-100 px-1 border rounded text-sm whitespace-nowrap">--gateway.addr string</code>, and <code className="bg-yellow-100 px-1 border rounded text-sm whitespace-nowrap">--gateway.port string</code>, to open the gateway and allow
-              anyone to use your IP as an endpoint to submit PFBs</li>
+              anyone to use your IP as an endpoint to submit {PFBName()}s</li>
           </ul>
         </div>
         <a href="https://go.dev/play/p/7ltvaj8lhRl" target="_blank" rel="noreferrer noopener" className="block bg-purple-100 text-purple-900 font-bold text-xl mt-4 rounded py-2 text-center hover:bg-purple-200">
@@ -71,6 +77,14 @@ function App() {
       <div className="w-full lg:w-2/3 flex items-center justify-center lg:min-h-screen bg-gray-100">
         <div className="bg-gray-100 rounded border bg-white w-1/2 p-6 my-12 lg:my-0">
           <form onSubmit={onSubmit}>
+            <div className="mb-2">
+              <label className="block text-lg">Network</label>
+              <select onChange={({ target }: any) => { setNetwork(target.value) }} className="border rounded px-3 py-2">
+                <option selected value="mocha">Mocha</option>
+                <option value="blockspacerace">Blockspace Race</option>
+                <option value="arabica">Arabica</option>
+              </select>
+            </div>
             <div className="flex mb-2">
               <div className="w-2/3 pr-4">
                 <label className="block text-lg">Node IP Address</label>
