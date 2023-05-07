@@ -74,8 +74,8 @@ function App() {
           Read the docs
         </a>
       </div>
-      <div className="w-full lg:w-2/3 flex items-center justify-center lg:min-h-screen bg-gray-100">
-        <div className="bg-gray-100 rounded border bg-white w-1/2 p-6 my-12 lg:my-0">
+      <div className="w-full lg:w-2/3 flex items-center justify-center lg:min-h-screen bg-gray-100 p-6">
+        <div className="bg-gray-100 rounded border bg-white w-full lg:w-1/2 p-6 my-12 lg:my-0">
           <form onSubmit={onSubmit}>
             <div className="mb-2">
               <label className="block text-lg">Network</label>
